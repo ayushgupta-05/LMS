@@ -68,9 +68,15 @@ export const stripeWebhooks = async (request, response)=>{
     // Handle the event
         switch (event.type) {
     case 'payment_intent.succeeded':{
-         
-        
+        const paymentIntent = event.data.object;
+        const paymentIntentId = paymentIntent.id;
+    
 
+        const session = await stripeInstance.checkout.sessions.list({
+            payment_intent: paymentIntentId
+        });
+
+        const { purchaseId } = session.data[0].metadata;
 
             const purchaseData = await Purchase.findById(purchaseId) 
             const userData = await User.findById(purchaseData.userId)
@@ -82,8 +88,9 @@ export const stripeWebhooks = async (request, response)=>{
             userData.enrolledCourses.push(courseData._id)
             await userData.save() ; 
 
-            purchaseData.status = 'completed'
-            await purchaseData.save() ;
+            purchaseData.status = 'completed';
+            await purchaseData.save();
+
 
             break;
         }
