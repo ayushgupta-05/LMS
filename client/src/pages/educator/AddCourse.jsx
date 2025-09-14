@@ -1,10 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import uniqid from 'uniqid' ; 
 import Quill from 'quill' ; 
 import { assets } from '../../assets/assets';
+import { AppContext } from '../../context/AppContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const AddCourse = () => {
 
+  const { backendUrl , getToken } = useContext(AppContext)
   const quillRef = useRef(null) ; 
   const editorRef = useRef(null) ; 
 
@@ -21,7 +25,7 @@ const AddCourse = () => {
       lectureTitle : '',
       lectureDuration : '',
       lectureUrl : '',
-      isPreviewFree : ''
+      isPreviewFree : false , 
     }
   )
 
@@ -92,10 +96,46 @@ const addLecture = () => {
     } ;     
 
     const handleSubmit = async(e) =>{
-      e.preventDefault() ; 
+      try{
+        e.preventDefault() ; 
+        if(!image){
+          toast.error('Thumbnail Not Selected')
+        }
+
+        const courseData = {
+          courseTitle , 
+          courseDescription : quillRef.current.root.innerHTML, 
+          coursePrice : Number(coursePrice) , 
+          discount : Number(discount) ,
+          courseContent : chapters, 
+        }
+
+        const formData = new FormData()
+        formData.append('courseData' , JSON.stringify(courseData))
+        formData.append('image' , image)
+
+        const token = await getToken()
+        const {data} = await axios.post(backendUrl + '/api/educator/add-course' , formData , { headers : {Authorization : `Bearer ${token}`}})
+
+        if(data.success){
+          toast.success(data.message)
+          setCourseTitle('')
+          setCoursePrice(0)
+          setDiscount(0)
+          setImage(null)
+          setChapters([])
+          quillRef.current.root.innerHTML = ""
+        }else{
+          toast.error(data.message)
+        }
+      }catch(error){
+        toast.error(error.message)
+      }
+      
     }
 
     useEffect(()=>{
+      //Initiate Quill only once 
       if(!quillRef.current && editorRef.current ){
         quillRef.current = new Quill(editorRef.current , {
           theme : 'snow' , 
@@ -146,7 +186,7 @@ const addLecture = () => {
 
         <div>
           {chapters.map ((chapter, chapterIndex) =>(
-          <div key={chapterIndex} className="bg-white border rounded-1g mb-4">
+          <div key={chapterIndex} className="bg-white border rounded-lg mb-4">
           <div className="flex justify-between items-center p-4 border-b">
           <div className='flex items-center' >
           <img src={assets.dropdown_icon} width={14} alt="" className=

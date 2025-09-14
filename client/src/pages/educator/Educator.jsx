@@ -12,7 +12,7 @@ const Educator = () => {
         <div className='flex'>
         <SideBar/>
         <div className='flex-1'>
-          {<Outlet/>}
+          <Outlet/>
         </div>
           
         </div>

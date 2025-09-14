@@ -24,7 +24,7 @@ const TestimonialsSection = () => {
               <div className='flex gap-0.5'>
                 {[...Array(5)].map((_, i)=>(
                     <img className='h-5' key={i} src ={
-                      i<Math.floor(testimonial.rating) ?assets.star : assets.star_blank}  alt='start'
+                      i<Math.floor(testimonial.rating) ?assets.star : assets.star_blank}  alt='star'
                       />                 
                 ))}
               </div>

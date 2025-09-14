@@ -1,21 +1,38 @@
 
+import axios from 'axios';
 import React, { useEffect, useState , useContext } from 'react'
+import { toast } from 'react-toastify';
 import { assets, dummyDashboardData } from '../../assets/assets';
 import Loading from '../../components/student/Loading';
 import { AppContext } from '../../context/AppContext'
 
 const Dashboard = () => {
   
-  const {currency} = useContext(AppContext) ;  
-  const [dashboardData , setDashboardData ] = useState(null) ; 
+
+  const { currency , backendUrl , isEducator , getToken} = useContext(AppContext);
+ const [dashboardData, setDashboardData] = useState(null);
+
 
   const fetchDashboardData = async()=>{
-    setDashboardData(dummyDashboardData) ; 
+    try{
+      const token = await getToken() ; 
+      const {data} = await axios.get(backendUrl + `/api/educator/dashboard` , {headers :{Authorization :`Bearer ${token}`}})
+      
+      if(data.success){
+        setDashboardData(data.dashboardData)
+      }else{
+        toast.error(data.message) ; 
+      }
+    }catch(error){
+      toast.error(error.message)
+    }
   }
 
-  useEffect(()=>{
-    fetchDashboardData() ;
-  } , [])
+  useEffect(() => {
+    if(isEducator){
+      fetchDashboardData();
+    }
+  }, [isEducator]);
 
   return dashboardData ? (
     <div className='min-h-screen flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0 '>
@@ -24,14 +41,16 @@ const Dashboard = () => {
             <div className='flex items-center gap-3 shadow-card border border-blue-500 p-4 w-56 rounded-md' >
                 <img src={assets.patients_icon} alt="patients_icon" />
           <div>
-            <p className='text-2xl font-medium text-gray-600'>{dashboardData. enrolledStudentsData.length}
+            <p className='text-2xl font-medium text-gray-600'>{dashboardData.enrolledStudentsData.length}
             </p>
             <p className='text-base text-gray-500'>Total Enrolments</p>
           </div>
             </div>
 
             <div className='flex items-center gap-3 shadow-card border border-blue-500 p-4 w-56 rounded-md' >
-                <img src={assets.appointments_icon} alt="patients_icon" />
+      
+                <img src={assets.appointments_icon} alt="appoitments_icon" />
+
           <div>
             <p className='text-2xl font-medium text-gray-600'>{dashboardData.totalCourses}
             </p>
@@ -40,7 +59,7 @@ const Dashboard = () => {
             </div>
 
             <div className='flex items-center gap-3 shadow-card border border-blue-500 p-4 w-56 rounded-md' >
-                <img src={assets.earning_icon} alt="patients_icon" />
+                <img src={assets.earning_icon} alt="earning_icon" />
           <div>
             <p className='text-2xl font-medium text-gray-600'>{currency}{dashboardData.totalEarnings}
             </p>
