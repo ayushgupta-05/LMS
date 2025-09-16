@@ -16,11 +16,13 @@ const Navbar = () => {
         </Link>
         <div className='flex items-center gap-5 text-black relative'>
         <p>
-          Hi! {user? user.fullName : 'Developers' }
+    Hi! {user?.fullName || user?.firstName || 'Developers'}
         </p>
+
         {isLoaded && user 
-          ? <UserButton /> 
-          : <img src={assets.profile_img} alt="Profile" className='max-w-8' />}
+  ? <UserButton /> 
+  : <img src={assets.profile_img} alt="Profile" className='max-w-8' />}
+
         {/* {user? <UserButton/>:  <img src={assets.profile_img} className='max-w-8'/> } */}
         </div>
     </div>
