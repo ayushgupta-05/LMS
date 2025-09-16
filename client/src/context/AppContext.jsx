@@ -78,44 +78,87 @@ export const AppContextProvider = (props) =>{
     }
 
     //Fetch UserData
-        const fetchUserData = async() =>{
+        // const fetchUserData = async() =>{
 
-        if(user.publicMetadata.role === 'educator'){
-            setIsEducator(true) ; 
-        }    
-
-            try{
-                const token = await getToken() ; 
-        const {data} = await axios.get(backendUrl + '/api/user/data' , {headers : {Authorization : `Bearer ${token}`}})        
-
-                if(data.success){
-                    setUserData(data.user)
-                }else{
-                    toast.error(data.message)
+        // if(user.publicMetadata.role === 'educator'){
+        //     setIsEducator(true) ; 
+        // }   
+        const fetchUserData = async () => {
+            if (!user) return; // ⬅️ guard clause
+          
+            // Safe role check
+            if (user.publicMetadata && user.publicMetadata.role === "educator") {
+              setIsEducator(true);
+            } else {
+              setIsEducator(false);
+            } 
+            try {
+                const token = await getToken();
+                const { data } = await axios.get(
+                  backendUrl + "/api/user/data",
+                  { headers: { Authorization: `Bearer ${token}` } }
+                );
+            
+                if (data.success) {
+                  setUserData(data.user);
+                } else {
+                  toast.error(data.message);
                 }
-            }catch(error){
-                toast.error(error.message)
-            }
-        }
+              } catch (error) {
+                toast.error(error.message);
+              }
+            };
+        //     try{
+        //         const token = await getToken() ; 
+        // const {data} = await axios.get(backendUrl + '/api/user/data' , {headers : {Authorization : `Bearer ${token}`}})        
+
+        //         if(data.success){
+        //             setUserData(data.user)
+        //         }else{
+        //             toast.error(data.message)
+        //         }
+        //     }catch(error){
+        //         toast.error(error.message)
+        //     }
+        // }
 
 
     //Fetch User Enrolled Courses
-    const fetchUserEnrolledCourses = async()=>{
-
-        try{
-            const token = await getToken() ; 
-            const {data}  = await axios.get(backendUrl + '/api/user/enrolled-courses' , {headers: {Authorization : `Bearer ${token}`}})
-    
-            if(data.success){
-                setEnrolledCourses(data.enrolledCourses.reverse())
-            }else{
-                toast.error(data.message)
-            }
-        }catch(error){
-            toast.error(error.message)
+    const fetchUserEnrolledCourses = async () => {
+        if (!user) return; // guard clause
+      
+        try {
+          const token = await getToken();
+          const { data } = await axios.get(
+            backendUrl + "/api/user/enrolled-courses",
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+      
+          if (data.success) {
+            setEnrolledCourses(data.enrolledCourses?.reverse() || []); // ⬅️ safe fallback
+          } else {
+            toast.error(data.message);
+          }
+        } catch (error) {
+          toast.error(error.message);
         }
+      };
+    // const fetchUserEnrolledCourses = async()=>{
+
+    //     try{
+    //         const token = await getToken() ; 
+    //         const {data}  = await axios.get(backendUrl + '/api/user/enrolled-courses' , {headers: {Authorization : `Bearer ${token}`}})
+    
+    //         if(data.success){
+    //             setEnrolledCourses(data.enrolledCourses.reverse())
+    //         }else{
+    //             toast.error(data.message)
+    //         }
+    //     }catch(error){
+    //         toast.error(error.message)
+    //     }
        
-    }
+    // }
 
     useEffect(() => {
         fetchAllCourses()

@@ -41,6 +41,34 @@ const MyCourses = () => {
             </tr>
           </thead>
           <tbody className="text-sm text-gray-500">
+  {courses.map((course) => (
+    <tr key={course._id || Math.random()} className="border-b border-gray-500/20">
+      <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
+        <img 
+          src={course?.courseThumbnail || "/placeholder.png"} 
+          alt="Course Image" 
+          className="w-16" 
+        />
+        <span className="truncate hidden md:block">
+          {course?.courseTitle || "Untitled Course"}
+        </span>  
+      </td>
+      <td className="px-4 py-3">
+        {currency}{" "}
+        {Math.floor(
+          (course?.enrolledStudents?.length || 0) *
+          ((course?.coursePrice || 0) - ((course?.discount || 0) * (course?.coursePrice || 0)) / 100)
+        )}
+      </td>
+      <td className="px-4 py-3">{course?.enrolledStudents?.length || 0}</td>
+      <td className="px-4 py-3">
+        {course?.createdAt ? new Date(course.createdAt).toLocaleDateString() : "N/A"}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+          {/* <tbody className="text-sm text-gray-500">
             {courses.map ((course) => (
               <tr key={course._id} className="border-b border-gray-500/20" >
                 <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
@@ -56,7 +84,7 @@ const MyCourses = () => {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </tbody> */}
         </table>
       </div>
       </div>
