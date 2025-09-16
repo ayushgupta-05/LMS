@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { assets } from '../../assets/assets'
-import {Link} from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useClerk , UserButton , useUser } from '@clerk/clerk-react'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
@@ -13,6 +13,7 @@ const Navbar = () => {
   const {openSignIn} = useClerk() 
   // const {user} = useUser() 
   const { user, isLoaded } = useUser();
+  const location = useLocation() 
 
 
   const becomeEducator  = async()=>{
@@ -73,7 +74,7 @@ const Navbar = () => {
 
       </div>
 
-    <div className='md:hidden flex items-center gap-2 sm:gap-5 text-gray-500'>
+    {/* <div className='md:hidden flex items-center gap-2 sm:gap-5 text-gray-500'>
       <div className='flex items-center gap-1 sm:gap-2 max-sm:text-xs'>
       { user && 
           <>
@@ -88,7 +89,27 @@ const Navbar = () => {
        <button onClick={()=> openSignIn()}><img src={assets.user_icon} alt="" /></button> }
     
 
-    </div>
+    </div> */}
+<div className='md:hidden flex items-center gap-2 sm:gap-5 text-gray-500'>
+  <div className='flex items-center gap-1 sm:gap-2 max-sm:text-xs'>
+    {user && (
+      <>
+        <button onClick={becomeEducator}>
+          {isEducator ? 'Educator Dashboard' : 'Become Educator'}
+        </button> |
+        <Link to='/my-enrollments'>My Enrollments</Link>
+      </>
+    )}
+  </div>
+
+  {isLoaded && user ? (
+    <UserButton />
+  ) : (
+    <button onClick={() => openSignIn()}>
+      <img src={assets.user_icon} alt="User" />
+    </button>
+  )}
+</div>
 
 
     </div>
