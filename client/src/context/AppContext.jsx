@@ -87,9 +87,10 @@ export const AppContextProvider = (props) =>{
             if (!user) return; // ⬅️ guard clause
           
             // Safe role check
-            if (user.publicMetadata && user.publicMetadata.role === "educator") {
-              setIsEducator(true);
-            } else {
+            if (user?.publicMetadata?.role === 'educator') {
+                setIsEducator(true);
+              }
+               else {
               setIsEducator(false);
             } 
             try {
@@ -135,7 +136,7 @@ export const AppContextProvider = (props) =>{
           );
       
           if (data.success) {
-            setEnrolledCourses(data.enrolledCourses?.reverse() || []); // ⬅️ safe fallback
+            setEnrolledCourses(data.enrolledCourses?.reverse() || []); //  safe fallback
           } else {
             toast.error(data.message);
           }
