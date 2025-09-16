@@ -11,7 +11,9 @@ const Navbar = () => {
    const {navigate , isEducator , backendUrl , setIsEducator , getToken} = useContext(AppContext)
 
   const {openSignIn} = useClerk() 
-  const {user} = useUser() 
+  // const {user} = useUser() 
+  const { user, isLoaded } = useUser();
+
 
   const becomeEducator  = async()=>{
     try{
@@ -53,11 +55,22 @@ const Navbar = () => {
           }
         </div>
 
-{ user? <UserButton/> : 
+{/* { user? <UserButton/> : 
         <button onClick={()=> openSignIn()}  className='bg-blue-600 text-white px-5 py-2 rounded-full'>
           Create Account
         </button>
-}
+} */}
+{isLoaded && user ? (
+  <UserButton />
+) : (
+  <button
+    onClick={() => openSignIn()}
+    className="bg-blue-600 text-white px-5 py-2 rounded-full"
+  >
+    Create Account
+  </button>
+)}
+
       </div>
 
     <div className='md:hidden flex items-center gap-2 sm:gap-5 text-gray-500'>

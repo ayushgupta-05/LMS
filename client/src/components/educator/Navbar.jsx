@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const educatorData  = dummyEducatorData ; 
-  const { user } = useUser() ;
+  // const { user } = useUser() ;
+  const { user, isLoaded } = useUser();
 
 
   return (
@@ -17,7 +18,10 @@ const Navbar = () => {
         <p>
           Hi! {user? user.fullName : 'Developers' }
         </p>
-        {user? <UserButton/>:  <img src={assets.profile_img} className='max-w-8'/> }
+        {isLoaded && user 
+          ? <UserButton /> 
+          : <img src={assets.profile_img} alt="Profile" className='max-w-8' />}
+        {/* {user? <UserButton/>:  <img src={assets.profile_img} className='max-w-8'/> } */}
         </div>
     </div>
   )
