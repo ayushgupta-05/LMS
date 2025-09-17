@@ -1,10 +1,10 @@
 import React from 'react'
-import {assets ,  dummyEducatorData } from '../../assets/assets'
+import {assets } from '../../assets/assets'
 import { UserButton , useUser } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom';
+import Loading from '../student/Loading';
 
 const Navbar = () => {
-  const educatorData  = dummyEducatorData ; 
   // const { user } = useUser() ;
   const { user, isLoaded } = useUser();
 
@@ -16,14 +16,20 @@ const Navbar = () => {
         </Link>
         <div className='flex items-center gap-5 text-black relative'>
         <p>
+  Hi! {isLoaded && user ? (user.fullName || user.firstName) : "Guest"}
+</p>
+
+        {/* <p>
     Hi! {user?.fullName || user?.firstName || 'Developers'}
-        </p>
+        </p> */}
+{isLoaded ? (
+  user ? (
+    <UserButton />
+  ) : (
+    <img src={assets.profile_img} alt="Profile" className="max-w-8" />
+  )
+) : <Loading/>}
 
-        {isLoaded && user 
-  ? <UserButton /> 
-  : <img src={assets.profile_img} alt="Profile" className='max-w-8' />}
-
-        {/* {user? <UserButton/>:  <img src={assets.profile_img} className='max-w-8'/> } */}
         </div>
     </div>
   )

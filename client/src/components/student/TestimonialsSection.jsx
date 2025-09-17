@@ -8,7 +8,7 @@ const TestimonialsSection = () => {
       <p className='md:text-base text-gray-500 mt-3'>
   Hear from our learners as they share their journeys of transformation, success, and how our <br /> platform has made a difference in their lives.  </p>
 
-  <div className='grid grid-cols-auto gap-8 mt-14'>
+  <div className='grid grid-cols-1 gap-8 mt-14'>
 
     {dummyTestimonial.map((testimonial , index)=>(
       <div key={index} className='text-sm text-left border border-gray-500/30 pb-6 rounded-lg bg-white shadow-[0px_4px_15px-0px] overflow-hidden shadow-black/5'>

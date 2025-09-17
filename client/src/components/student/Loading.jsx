@@ -13,7 +13,7 @@ const Loading = () => {
       } , 5000)
       return ()=> clearTimeout(timer);
     }
-  }, [])
+  }, [path , navigate])
 
   return (
     <div className='min-h-screen flex items-center justify-center'>

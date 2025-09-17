@@ -47,13 +47,14 @@ const Navbar = () => {
       <div className='hidden md:flex items-center gap-5 text-gray-500'>
         <div className='flex items-center gap-5 '>
           
-          { user && 
-          <>
-          <button onClick={becomeEducator} >
-            {isEducator ? 'Educator Dashboard' : 'Become Educator'}</button> |
-          <Link to='/my-enrollments'>My Enrollments</Link>
-          </>
-          }
+        {isLoaded && user && (
+  <>
+     <button onClick={becomeEducator}>
+       {isEducator ? 'Educator Dashboard' : 'Become Educator'}
+     </button> |
+     <Link to='/my-enrollments'>My Enrollments</Link>
+   </>
+ )}
         </div>
 
 {/* { user? <UserButton/> : 
@@ -92,14 +93,22 @@ const Navbar = () => {
     </div> */}
 <div className='md:hidden flex items-center gap-2 sm:gap-5 text-gray-500'>
   <div className='flex items-center gap-1 sm:gap-2 max-sm:text-xs'>
-    {user && (
+  {isLoaded && user && (
+  <>
+     <button onClick={becomeEducator}>
+       {isEducator ? 'Educator Dashboard' : 'Become Educator'}
+     </button> |
+     <Link to='/my-enrollments'>My Enrollments</Link>
+   </>
+ )}
+    {/* {user && (
       <>
         <button onClick={becomeEducator}>
           {isEducator ? 'Educator Dashboard' : 'Become Educator'}
         </button> |
         <Link to='/my-enrollments'>My Enrollments</Link>
       </>
-    )}
+    )} */}
   </div>
 
   {isLoaded && user ? (
