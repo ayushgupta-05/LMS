@@ -60,10 +60,15 @@ const CourseDetails = () => {
   }, [])
 
   useEffect(() => {
-    if(userData && courseData){
-      setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
+    if (userData && courseData) {
+      setIsAlreadyEnrolled(userData.enrolledCourses?.includes(courseData._id?.toString()))
     }
-  }, [userData , courseData])
+  }, [userData, courseData])
+  // useEffect(() => {
+  //   if(userData && courseData){
+  //     setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
+  //   }
+  // }, [userData , courseData])
 
   const toggleSection = (index)=>{
       setOpenSections((prev)=>(
@@ -83,7 +88,7 @@ const CourseDetails = () => {
       <div className='max-w-xl z-10 text-gray-500'>
 
         <h1 className='md:text-course-details-heading-large
-        text-course-deatails-heading-small font-semibold text-gray-800'
+        text-course-details-heading-small font-semibold text-gray-800'
         >{courseData.courseTitle}</h1>
 
         <p className='pt-4 md:text-base text-sm'
@@ -106,9 +111,13 @@ const CourseDetails = () => {
         {courseData.enrolledStudents.length} {courseData.enrolledStudents.length > 1 ? 'Students' : 'Student'}
         </p>
         </div>
+
+        <p className='text-sm'>Course by <span className='text-blue-600 underline'>
+            {courseData.educator?.name || 'TMU Teacher'}
+          </span> </p>
        
-       <p className='text-sm'>Course by <span className='text-blue-600 underline'
-       >{courseData.educator.name}</span> </p>
+       {/* <p className='text-sm'>Course by <span className='text-blue-600 underline'
+       >{courseData.educator.name}</span> </p> */}
 
        <div className='pt-8 text-gray-800'>
             <h2 className='text-xl font-semibold'>Course Structure</h2>
@@ -140,7 +149,8 @@ const CourseDetails = () => {
                            <div className='flex gap-2'>
                              {lecture.isPreviewFree && <p 
                              onClick={()=>setPlayerData({
-                              videoId : lecture.lectureUrl.split('/').pop() 
+                              videoId: lecture.lectureUrl ? lecture.lectureUrl.split('/').pop() : ''
+                              // videoId : lecture.lectureUrl.split('/').pop() 
                              })}
                              className='text-blue-500 cursor-pointer'
                              >Preview</p> }  
